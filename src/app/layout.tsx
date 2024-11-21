@@ -15,10 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      >
-        {children}
-      </body>
+      <head>
+        <link rel="icon" href="https://air-assitant.vercel.app/logo3.png" />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
