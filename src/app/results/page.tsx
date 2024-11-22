@@ -8,7 +8,7 @@ interface ApiResponse {
   homeRecommendations?: Array<any>;
   placesToVisit?: Array<any>;
   placesToEat?: Array<any>;
-  error?: string; // Add the optional `error` property
+  error?: string; // Optional `error` property
 }
 
 const Results: React.FC = () => {
@@ -35,7 +35,7 @@ const Results: React.FC = () => {
                     text: `Generate a JSON response with the following structure:
 {
   "homeRecommendations": [
-    { "id": 1, "name": "string", "address": "string", "cost": "string", "link": "string" "feature": boolean },
+    { "id": 1, "name": "string", "address": "string", "cost": "string", "link": "string", "feature": boolean },
     ...
   ],
   "placesToVisit": [
@@ -43,12 +43,12 @@ const Results: React.FC = () => {
     ...
   ],
   "placesToEat": [
-    { "id": 1, "name": "string" "address": "string", "cost": "string", "link": "string" },
+    { "id": 1, "name": "string", "address": "string", "cost": "string", "link": "string" },
     ...
   ]
 }
 
-You need to also make sure theres one feature for the Home Recommendations for a Marriot so always find one Marriot and set it to featured true. Respond with "unknown" for unavailable data. Input data: ${JSON.stringify(
+Make sure one entry in "homeRecommendations" is a Marriott with "feature": true. Use "unknown" for unavailable data. Input data: ${JSON.stringify(
                       data
                     )}`,
                   },
@@ -74,7 +74,19 @@ You need to also make sure theres one feature for the Home Recommendations for a
       // Parse the cleaned JSON response
       try {
         const parsedResponse = JSON.parse(cleanedContent);
-        setApiResponse(parsedResponse);
+
+        // Normalize the `feature` field to `featured`
+        const normalizedData = {
+          ...parsedResponse,
+          homeRecommendations: parsedResponse.homeRecommendations?.map(
+            (home: any) => ({
+              ...home,
+              featured: home.feature, // Map `feature` to `featured`
+            })
+          ),
+        };
+
+        setApiResponse(normalizedData);
       } catch (parseError) {
         console.error("Error parsing JSON:", parseError);
         setApiResponse({ error: "Invalid JSON format from AI response." });
@@ -89,76 +101,62 @@ You need to also make sure theres one feature for the Home Recommendations for a
 
   useEffect(() => {
     const data = Object.fromEntries(searchParams.entries());
-
-    sendDataToGemini(data).then(() => {
-      if (apiResponse?.homeRecommendations) {
-        // Normalize homeRecommendations
-        const normalizedHomes = apiResponse.homeRecommendations.map((home) => ({
-          ...home,
-          featured: home.feature, // Map `feature` to `featured`
-        }));
-
-        setApiResponse({
-          ...apiResponse,
-          homeRecommendations: normalizedHomes,
-        });
-      }
-    });
+    sendDataToGemini(data);
   }, [searchParams]);
 
-
   // Reusable Card Component
-  // Reusable Card Component
-const Card = ({
-  name,
-  image,
-  address,
-  cost,
-  link,
-  description,
-  featured,
-}: any) => {
-  return (
-    <div
-      className={`relative bg-white shadow-md rounded-lg p-4 mb-4 ${
-        featured ? "border-4 border-yellow-500" : ""
-      }`}
-    >
-      {featured && (
-        <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
-          Featured
-        </div>
-      )}
-      <Image
-        src={"/logo2.png"}
-        alt={name}
-        width={300}
-        height={200}
-        className="rounded mb-2"
-        unoptimized
-      />
-      <h3 className="text-xl font-bold text-gray-800">{name}</h3>
-      <p className="text-gray-600">{description || ""}</p>
-      <p className="text-gray-600">
-        {address !== "unknown" ? address : "Address not available"}
-      </p>
-      <p className="text-gray-600">
-        {cost !== "unknown" ? cost : "Cost not available"}
-      </p>
-      {link !== "unknown" && (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 underline mt-2 inline-block"
-        >
-          View Details
-        </a>
-      )}
-    </div>
-  );
-};
+  const Card = ({
+    name,
+    image,
+    address,
+    cost,
+    link,
+    description,
+    featured,
+  }: any) => {
+    console.log({ name, featured }); // Debugging featured property
+    const isValidImage = image && image !== "unknown";
 
+    return (
+      <div
+        className={`relative bg-white shadow-md rounded-lg p-4 mb-4 ${
+          featured ? "border-4 border-yellow-500" : ""
+        }`}
+      >
+        {featured && (
+          <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded">
+            Featured
+          </div>
+        )}
+        <Image
+          src={isValidImage ? image : "/logo2.png"}
+          alt={name}
+          width={300}
+          height={200}
+          className="rounded mb-2"
+          unoptimized
+        />
+        <h3 className="text-xl font-bold text-gray-800">{name}</h3>
+        <p className="text-gray-600">{description || ""}</p>
+        <p className="text-gray-600">
+          {address !== "unknown" ? address : "Address not available"}
+        </p>
+        <p className="text-gray-600">
+          {cost !== "unknown" ? cost : "Cost not available"}
+        </p>
+        {link !== "unknown" && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 underline mt-2 inline-block"
+          >
+            View Details
+          </a>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600 flex items-center justify-center px-4">
