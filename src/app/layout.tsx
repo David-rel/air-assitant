@@ -4,7 +4,7 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "Air Assistant",
+  title: "Air Assist",
   description: "Air BnB AI Assistant",
 };
 
@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="https://air-assitant.vercel.app/logo3.png" />
+        <link rel="icon" href="https://air-assist.vercel.app/logo3.png" />
       </head>
       <body>{children}</body>
     </html>

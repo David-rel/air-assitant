@@ -57,7 +57,7 @@ const QuestionnaireForm: React.FC = () => {
             height={60}
             className="mx-auto mb-4"
           />
-          <h1 className="text-3xl font-bold text-gray-800">Air Assistant</h1>
+          <h1 className="text-3xl font-bold text-gray-800">Air Assist</h1>
           <p className="text-gray-600 mt-2">Plan your next trip with ease</p>
         </div>
 
