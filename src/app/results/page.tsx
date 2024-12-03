@@ -8,7 +8,8 @@ interface ApiResponse {
   homeRecommendations?: Array<any>;
   placesToVisit?: Array<any>;
   placesToEat?: Array<any>;
-  error?: string; // Optional `error` property
+  vaccine?: boolean; // Added vaccine field
+  error?: string;
 }
 
 const Results: React.FC = () => {
@@ -45,10 +46,12 @@ const Results: React.FC = () => {
   "placesToEat": [
     { "id": 1, "name": "string", "address": "string", "cost": "string", "link": "string" },
     ...
-  ]
+  ],
+  "vaccine": boolean
+
 }
 
-Make sure one entry in "homeRecommendations" is a Marriott with "feature": true. Use "unknown" for unavailable data. Input data: ${JSON.stringify(
+Make sure one entry in "homeRecommendations" is a Marriott with "feature": true. Use "unknown" for unavailable data but always try to fill in all data. Finally if the location is somewhere in Africa or South America fill in the vaccine at the bottom of the json as true or false if not. Input data: ${JSON.stringify(
                       data
                     )}`,
                   },
@@ -183,6 +186,15 @@ Make sure one entry in "homeRecommendations" is a Marriott with "feature": true.
             <p className="text-red-500 text-center">{apiResponse.error}</p>
           ) : (
             <>
+              {/* Vaccine Information */}
+              {apiResponse?.vaccine && (
+                <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
+                  <p>
+                    <strong>Note:</strong> Vaccination is recommended for this
+                    destination.
+                  </p>
+                </div>
+              )}
               {/* Home Recommendations */}
               <div className="">
                 <h2 className="text-3xl underline font-bold text-gray-700 mb-4">

@@ -57,8 +57,11 @@ const QuestionnaireForm: React.FC = () => {
             height={60}
             className="mx-auto mb-4"
           />
-          <h1 className="text-3xl font-bold text-gray-800">Air Assist</h1>
+          <h1 className="text-3xl font-bold text-gray-800">Wander</h1>
+          {/* Description */}
           <p className="text-gray-600 mt-2">Plan your next trip with ease</p>
+
+          {/* Passport Button */}
         </div>
 
         {/* Form */}
@@ -200,13 +203,23 @@ const QuestionnaireForm: React.FC = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full mt-6 bg-rose-500 text-white py-3 px-4 rounded-lg font-bold hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
-          >
-            Submit
-          </button>
+          <div className="flex justify-between items-center space-x-4 mt-4">
+            {/* Passport Button */}
+            <button
+              onClick={() => alert("Redirecting to passport application...")} // Replace with your desired action
+              className="bg-white border border-rose-500 text-rose-500 py-2 px-4 rounded-lg font-bold hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+            >
+              I need a passport
+            </button>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="bg-rose-500 text-white py-2 px-4 rounded-lg font-bold hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
+            >
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     </div>

@@ -4,7 +4,7 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "Air Assist",
+  title: "Wander",
   description: "Air BnB AI Assistant",
 };
 
